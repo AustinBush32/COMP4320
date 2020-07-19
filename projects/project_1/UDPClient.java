@@ -1,32 +1,31 @@
 import java.io.*;
 import java.net.*;
 
+
 class UDPClient {
 
     public static void main(String args[]) throws Exception {   
 
-        BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
+        // Variable initializations
+        DatagramSocket client_socket = new DatagramSocket();
+        InetAddress server_ip = InetAddress.getByName("localhost");
+        int server_port = 9090;
+        String http_request = "GET TestFile.html HTTP/1.0 "
 
-        DatagramSocket clientSocket = new DatagramSocket();
+        // Send packet to server
+        byte[] data_out = http_request.getBytes();
+        DatagramPacket packet_out = new DatagramPacket(
+            data_out, data_out.length, server_ip, server_port
+        );    
+        clientSocket.send(packet_out);
 
-        InetAddress IPAddress = InetAddress.getByName("localhost");
+        // receive packet from server
+        byte[] data_in = new byte[256];
+        DatagramPacket packet_in = new DatagramPacket(data_in, data_in.length);
+        client_socket.receive(packet_in);
 
-        byte[] sendData = new byte[1024];
-        byte[] receiveData = new byte[1024];
+        client_socket.close();
 
-        String sentence = inFromUser.readLine();      
-        sendData = sentence.getBytes();
-
-        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);       
-        clientSocket.send(sendPacket);
-
-        DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-        clientSocket.receive(receivePacket);
-
-        String modifiedSentence = new String(receivePacket.getData());
-        System.out.println("FROM SERVER:" + modifiedSentence;
-
-        clientSocket.close();       
     }
 
 }
