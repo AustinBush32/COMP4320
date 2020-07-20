@@ -32,11 +32,11 @@ class UDPClient {
             System.out.println(new String(packet_in.getData()));
 
             if (new String(packet_in.getData()) == "\0") {
-                System.out.println("fuck");
+                System.out.println("received the \0");
                 break;
             }
         }
-
+        System.out.println("finish");
         client_socket.close();
 
     }

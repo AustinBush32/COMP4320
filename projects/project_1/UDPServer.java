@@ -48,7 +48,9 @@ class UDPServer {
 
             // Notify the client that all data has been sent via a null character
             packet_out.setData(data_terminate);
+            System.out.println(new String(packet_out.getData()));
             server_socket.send(packet_out);
+
         }
 
     }
