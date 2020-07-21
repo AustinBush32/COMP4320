@@ -21,58 +21,64 @@ class UDPClient {
             data_out, data_out.length, server_ip, server_port
         );    
         client_socket.send(packet_out);
+        System.out.println("-------------------------Sending Data to server-------------------------");
 
         // receive packet from server
+        System.out.println("-------------------------Receiving Data from server-------------------------");
         byte[] data_in = new byte[256];
         DatagramPacket packet_in = new DatagramPacket(data_in, data_in.length);
-        while (true) {
-            packet_in.setData(data_in);
-            client_socket.receive(packet_in);
-            
-            System.out.println(new String(packet_in.getData()));
+        
+        ArrayList<Packet> received_packets = new ArrayList<>();
+        boolean data_done_sending = false;
+        int packetNum = 0;
 
-            if (new String(packet_in.getData()) == "\0") {
-                System.out.println("received the \0");
-                break;
+        while (!data_done_sending) {
+            client_socket.receive(packet_in);
+            Packet data_received = Packet.createPacket(packet_in);
+            packetNum++;
+            System.out.println("Packet: " + packetNum);
+            if (data_received.GETPacketData()[0] == '\0') {
+                data_done_sending = true;
+            } else {
+                received_packets.add(data_received);
             }
         }
-        System.out.println("finish");
-        client_socket.close();
 
+        client_socket.close();
     }
 
-    // private static void gremlin(String probability, Packet packet) {
-    //     Random rand = new Random();
-    //     double damageProb = rand.nextDouble();
-    //     double flipProb = rand.nextDouble();
-    //     int bytesToChange;
+    private static void gremlin(String probability, Packet packet) {
+        Random rand = new Random();
+        double damageProb = rand.nextDouble();
+        double flipProb = rand.nextDouble();
+        int bytesToChange;
 
-    //     if (flipProb <= 0.5) {
-    //         bytesToChange = 1;
-    //     } else if (flipProb <= 0.8) {
-    //         bytesToChange = 2;
-    //     } else {
-    //         bytesToChange = 3;
-    //     }
+        if (flipProb <= 0.5) {
+            bytesToChange = 1;
+        } else if (flipProb <= 0.8) {
+            bytesToChange = 2;
+        } else {
+            bytesToChange = 3;
+        }
 
-    //     if (damageProb <= Double.parseDouble(probability)) {
-    //         for (int i = 0; i < bytesToChange; i++) {
-    //             byte[] data = packet.GETPacketData();
-    //             int byteNum = rand.nextInt(packet.getPacketDataSize());
-    //             data[byteNum] = (byte) ~data[byteNum];
-    //         }
-    //     }
-    // }
+        if (damageProb <= Double.parseDouble(probability)) {
+            for (int i = 0; i < bytesToChange; i++) {
+                byte[] data = packet.GETPacketData();
+                int byteNum = rand.nextInt(packet.getPacketDataSize());
+                data[byteNum] = (byte) ~data[byteNum];
+            }
+        }
+    }
 
-    // private static void errorDetection(ArrayList<Packet> packetList) {
-    //     for (Packet packet : packetList) {
-    //         Short checkSum = Short.parseShort(packet.getHeaderValue(Packet.HEADER_ELEMENTS.CHECKSUM));
-    //         byte[] data = packet.GETPacketData();
-    //         short calculatedCheckSum = Packet.checkSum(data);
-    //         if (!checkSum.equals(calculatedCheckSum)) {
-    //             System.out.println("Error detected in Packet Number: " + packet.getHeaderValue(Packet.HEADER_ELEMENTS.SEGMENT_NUMBER));
-    //         }
-    //     }
-    // }
+    private static void errorDetection(ArrayList<Packet> packetList) {
+        for (Packet packet : packetList) {
+            Short checkSum = Short.parseShort(packet.getHeaderValue(Packet.HEADER_ELEMENTS.CHECKSUM));
+            byte[] data = packet.GETPacketData();
+            short calculatedCheckSum = Packet.checkSum(data);
+            if (!checkSum.equals(calculatedCheckSum)) {
+                System.out.println("Error detected in Packet Number: " + packet.getHeaderValue(Packet.HEADER_ELEMENTS.SEGMENT_NUMBER));
+            }
+        }
+    }
 
 }

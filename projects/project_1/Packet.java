@@ -49,8 +49,8 @@ public class Packet {
             for (Packet packet : packetList) {
                 String segment = packet.getHeaderValue(HEADER_ELEMENTS.SEGMENT_NUMBER);
                 if (Integer.parseInt(segment) == i) {
-                    for(int j = 0; k < packet.getPacketDataSize(); k++) {
-                        assembledPacket[counter + k] = packet.GETPacketData(k);
+                    for(int j = 0; j < packet.getPacketDataSize(); j++) {
+                        assembledPacket[counter + j] = packet.GETPacketData(j);
                     }
                     counter += packet.getPacketDataSize();
                     break;
@@ -86,8 +86,8 @@ public class Packet {
                 j++;
             }
             nextPacket.setPacketData(data);
-            packet.setHeaderValue(HEADER_ELEMENTS.SEGMENT_NUMBER, segmentNumber + "");
-            String CheckSumPacket = String.valueOf(Packet.CheckSum(data));
+            nextPacket.setHeaderValue(HEADER_ELEMENTS.SEGMENT_NUMBER, segmentNumber + "");
+            String CheckSumPacket = String.valueOf(Packet.checkSum(data));
             nextPacket.setHeaderValue(HEADER_ELEMENTS.CHECKSUM, CheckSumPacket);
             packet.add(nextPacket);
             segmentNumber++;
@@ -97,7 +97,7 @@ public class Packet {
     }
 
     // method to create a new packet
-    static packet createPacket(DatagramPacket packet) {
+    static Packet createPacket(DatagramPacket packet) {
         Packet newPacket = new Packet(); // initalize a packet
         ByteBuffer bytebuffer = ByteBuffer.wrap(packet.getData()); // wrap into buffer
 
