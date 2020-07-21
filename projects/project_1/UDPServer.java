@@ -8,83 +8,83 @@ class UDPServer {
     public static void main(String args[]) throws Exception {
 
         // Create socket at port 9090
-        DatagramSocket server_socket = new DatagramSocket(9090);
+        DatagramSocket serverSocket = new DatagramSocket(9090);
 
         // Create byte arrays
-        byte[] data_in = new byte[256];
-        byte[] data_out  = new byte[256];
-        String null_byte = "\0";
-        byte[] data_terminate = "\0".getBytes();
+        byte[] dataIn = new byte[256];
+        byte[] dataOut  = new byte[256];
+        String nullByte = "\0";
+        byte[] dataTerminate = "\0".getBytes();
 
         // Declare a FileInputStream object to convert the requested file to bytes
-        FileInputStream file_bytes;
+        FileInputStream fileBytes;
 
 
         while(true) {
 
             // Get packet sent from client
-            DatagramPacket packet_in = new DatagramPacket(data_in, data_in.length);
-            server_socket.receive(packet_in);
+            DatagramPacket packetIn = new DatagramPacket(dataIn, dataIn.length);
+            serverSocket.receive(packetIn);
 
             // Get client IP address, port number, and HTTP request
-            InetAddress client_ip = packet_in.getAddress();
-            int client_port = packet_in.getPort();
-            String client_get_request = new String(packet_in.getData());
+            InetAddress clientIP = packetIn.getAddress();
+            int clientPort = packetIn.getPort();
+            String clientGetRequest = new String(packetIn.getData());
 
             // Create the DatagramPacket to send data back to the client
-            DatagramPacket packet_out = new DatagramPacket(
-                data_out, data_out.length, client_ip, client_port
+            DatagramPacket packetOut = new DatagramPacket(
+                dataOut, dataOut.length, clientIP, clientPort
             );
 
             // Get the name of the file requested by the client
-            String file_name = client_get_request.substring(
-                client_get_request.indexOf(" ") + 1, client_get_request.lastIndexOf(" ")
+            String fileName = clientGetRequest.substring(
+                clientGetRequest.indexOf(" ") + 1, clientGetRequest.lastIndexOf(" ")
             );
 
             // Define the FileInputStream object
-            // file_bytes = new FileInputStream(new File(file_name));
+            // fileBytes = new FileInputStream(new File(fileName));
 
-            Scanner file_in = new Scanner(new File(file_name));
-            StringBuilder file_data_contents = new StringBuilder();
+            Scanner fileIn = new Scanner(new File(fileName));
+            StringBuilder fileDataContents = new StringBuilder();
 
-            while (file_in.hasNext()) {
-                file_data_contents.append(file_in.nextLine());
+            while (fileIn.hasNext()) {
+                fileDataContents.append(fileIn.nextLine());
             }
 
-            // System.out.println("File: " + file_data_contents);
-            file_in.close();
+            // System.out.println("File: " + fileDataContents);
+            fileIn.close();
 
-            String HTTP_HeaderForm = "HTTP/1.0 TestFile.html Follows\r\n"
+            String httpHeaderForm = "HTTP/1.0 TestFile.html Follows\r\n"
                     + "Content-Type: text/plain\r\n"
-                    + "Content-Length: " + file_data_contents.length() + "\r\n"
-                    + "\r\n" + file_data_contents;
+                    + "Content-Length: " + fileDataContents.length() + "\r\n"
+                    + "\r\n" + fileDataContents;
 
-            ArrayList<Packet> packet_list = Packet.segmentation(HTTP_HeaderForm.getBytes()); //segments file into packets
-            System.out.println("List of segmented packets is " + packet_list.size() + " packets long");
+            ArrayList<Packet> packetList = Packet.segmentation(httpHeaderForm.getBytes()); //segments file into packets
+            System.out.println("List of segmented packets is " + packetList.size() + " packets long");
 
-            for(Packet packet : packet_list) {
-                DatagramPacket send_packet = packet.getDatagramPacket(client_ip, client_port);
-                server_socket.send(send_packet);
+            for(Packet packet : packetList) {
+                DatagramPacket sendPacket = packet.getDatagramPacket(clientIP, clientPort);
+                serverSocket.send(sendPacket);
 
-                // packet_out.setData(packet.GETPacketData()); 
-                // server_socket.send(packet_out);
+                // packetOut.setData(packet.GETPacketData()); 
+                // serverSocket.send(packetOut);
             }
 
             // Send the requested data to the client
-            // while(file_bytes.read(data_out) != -1) {
-            //     packet_out.setData(data_out);
-            //     server_socket.send(packet_out);
+            // while(fileBytes.read(dataOut) != -1) {
+            //     packetOut.setData(dataOut);
+            //     serverSocket.send(packetOut);
             // }
 
             // Notify the client that all data has been sent via a null character
             System.out.println("Sending null character");
-            ArrayList<Packet> nullPacket = Packet.segmentation(null_byte.getBytes());
-            // packet_out.setData(data_terminate);
-            // packet_out.setData(nullPacket.get(0).GETPacketData());
-            DatagramPacket nullDatagram = nullPacket.get(0).getDatagramPacket(client_ip, client_port);
-            server_socket.send(nullDatagram);
+            ArrayList<Packet> nullPacket = Packet.segmentation(nullByte.getBytes());
+            // packetOut.setData(dataTerminate);
+            // packetOut.setData(nullPacket.get(0).GETPacketData());
+            DatagramPacket nullDatagram = nullPacket.get(0).getDatagramPacket(clientIP, clientPort);
+            serverSocket.send(nullDatagram);
             System.out.print("Sent");
-            // server_socket.close();
+            // serverSocket.close();
 
         }
 
