@@ -41,6 +41,7 @@ public class Packet {
         for(Packet packet : packetList) {
             size += packet.getPacketDataSize();
         }
+
         byte[] assembledPacket = new byte[size]; //byte array for assembled packet
 
         int counter = 0;
@@ -102,7 +103,8 @@ public class Packet {
         ByteBuffer bytebuffer = ByteBuffer.wrap(packet.getData()); // wrap into buffer
 
         // Set header segments
-        newPacket.setHeaderValue(HEADER_ELEMENTS.SEGMENT_NUMBER, bytebuffer.getShort() + "");
+        String seg = bytebuffer.getShort() + "";
+        newPacket.setHeaderValue(HEADER_ELEMENTS.SEGMENT_NUMBER, seg);
         newPacket.setHeaderValue(HEADER_ELEMENTS.CHECKSUM, bytebuffer.getShort() + "");
 
         byte[] data = packet.getData();

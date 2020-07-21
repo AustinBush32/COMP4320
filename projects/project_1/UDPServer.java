@@ -13,6 +13,7 @@ class UDPServer {
         // Create byte arrays
         byte[] data_in = new byte[256];
         byte[] data_out  = new byte[256];
+        String null_byte = "\0";
         byte[] data_terminate = "\0".getBytes();
 
         // Declare a FileInputStream object to convert the requested file to bytes
@@ -50,7 +51,7 @@ class UDPServer {
                 file_data_contents.append(file_in.nextLine());
             }
 
-            System.out.println("File: " + file_data_contents);
+            // System.out.println("File: " + file_data_contents);
             file_in.close();
 
             String HTTP_HeaderForm = "HTTP/1.0 TestFile.html Follows\r\n"
@@ -62,8 +63,11 @@ class UDPServer {
             System.out.println("List of segmented packets is " + packet_list.size() + " packets long");
 
             for(Packet packet : packet_list) {
-                packet_out.setData(packet.GETPacketData()); 
-                server_socket.send(packet_out);
+                DatagramPacket send_packet = packet.getDatagramPacket(client_ip, client_port);
+                server_socket.send(send_packet);
+
+                // packet_out.setData(packet.GETPacketData()); 
+                // server_socket.send(packet_out);
             }
 
             // Send the requested data to the client
@@ -73,9 +77,14 @@ class UDPServer {
             // }
 
             // Notify the client that all data has been sent via a null character
-            packet_out.setData(data_terminate);
-            System.out.println(new String(packet_out.getData()));
-            server_socket.send(packet_out);
+            System.out.println("Sending null character");
+            ArrayList<Packet> nullPacket = Packet.segmentation(null_byte.getBytes());
+            // packet_out.setData(data_terminate);
+            // packet_out.setData(nullPacket.get(0).GETPacketData());
+            DatagramPacket nullDatagram = nullPacket.get(0).getDatagramPacket(client_ip, client_port);
+            server_socket.send(nullDatagram);
+            System.out.print("Sent");
+            // server_socket.close();
 
         }
 

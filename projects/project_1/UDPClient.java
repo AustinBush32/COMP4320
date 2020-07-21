@@ -21,22 +21,22 @@ class UDPClient {
             data_out, data_out.length, server_ip, server_port
         );    
         client_socket.send(packet_out);
-        System.out.println("-------------------------Sending Data to server-------------------------");
+        System.out.println("-------------------------Sending Data to Server-------------------------");
 
         // receive packet from server
-        System.out.println("-------------------------Receiving Data from server-------------------------");
+        System.out.println("-----------------------Receiving Data from Server-----------------------");
         byte[] data_in = new byte[256];
         DatagramPacket packet_in = new DatagramPacket(data_in, data_in.length);
         
         ArrayList<Packet> received_packets = new ArrayList<>();
         boolean data_done_sending = false;
-        int packetNum = 0;
+        int packet_num = 0;
 
         while (!data_done_sending) {
             client_socket.receive(packet_in);
             Packet data_received = Packet.createPacket(packet_in);
-            packetNum++;
-            System.out.println("Packet: " + packetNum);
+            packet_num++;
+            System.out.println("Received packet_num: " + packet_num);
             if (data_received.GETPacketData()[0] == '\0') {
                 data_done_sending = true;
             } else {
@@ -45,6 +45,24 @@ class UDPClient {
         }
 
         client_socket.close();
+
+        System.out.println("------------------------Running Gremlin Function------------------------");
+        String gremlin_prob = "0.0";
+        if (args.length == 0) {
+            System.out.println("There were no command line argumants for gremlin function");
+        } else {
+            gremlin_prob = args[0];
+        }
+
+        for (Packet packet : received_packets) {
+            gremlin(gremlin_prob, packet);
+        }
+
+        errorDetection(received_packets);
+
+        byte[] reassembled_file = Packet.reassemblePacket(received_packets);
+        String reassembled_file_string = new String(reassembled_file);
+        System.out.println("file recieved from server:\n" + reassembled_file_string);
     }
 
     private static void gremlin(String probability, Packet packet) {
