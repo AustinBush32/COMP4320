@@ -1,7 +1,6 @@
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 
 class UDPServer {   
@@ -29,12 +28,16 @@ class UDPServer {
             String fileName = clientGetRequest.substring(
                 clientGetRequest.indexOf(" ") + 1, clientGetRequest.lastIndexOf(" ")
             );
-
-            Scanner fileIn = new Scanner(new File(fileName));
+            BufferedReader fileIn = new BufferedReader(new FileReader(fileName));
+            // Scanner fileIn = new Scanner(new File(fileName));
             StringBuilder fileDataContents = new StringBuilder();
 
-            while (fileIn.hasNext()) {
-                fileDataContents.append(fileIn.nextLine());
+            String line = fileIn.readLine();
+            System.out.println("line: " + line);
+            while (line != null) {
+                System.out.println(line);
+                fileDataContents.append(line);
+                line = fileIn.readLine();
             }
 
             fileIn.close();

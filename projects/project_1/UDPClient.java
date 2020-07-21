@@ -10,7 +10,7 @@ class UDPClient {
 
         // Variable initializations
         DatagramSocket clientSocket = new DatagramSocket();
-        InetAddress serverIP = InetAddress.getByName("192.168.0.65");
+        InetAddress serverIP = InetAddress.getByName("localhost");
         int serverPort = 9090;
         String httpRequest = "GET TestFile.html HTTP/1.0";
 
@@ -28,18 +28,18 @@ class UDPClient {
         byte[] dataIn = new byte[256];
         DatagramPacket packetIn = new DatagramPacket(dataIn, dataIn.length);
         
-        ArrayList<Packet> receivedPackets = new ArrayList<>();
-        boolean dataDoneSending = false;
+        ArrayList<Packet> received = new ArrayList<>();
+        boolean finished = false;
         int packetNum = 0;
 
-        while (!dataDoneSending) {
+        while (!finished) {
             clientSocket.receive(packetIn);
             Packet dataReceived = Packet.createPacket(packetIn);
             packetNum++;
             if (dataReceived.getPacketData()[0] == '\0') {
-                dataDoneSending = true;
+                finished = true;
             } else {
-                receivedPackets.add(dataReceived);
+                received.add(dataReceived);
                 System.out.println("Received packetNum: " + packetNum);
             }
         }
@@ -54,15 +54,26 @@ class UDPClient {
             gremlinProb = args[0];
         }
 
-        for (Packet packet : receivedPackets) {
+        for (Packet packet : received) {
             gremlin(gremlinProb, packet);
         }
 
-        errorDetection(receivedPackets);
+        errorDetection(received);
 
-        byte[] reassembledFile = Packet.reassemblePacket(receivedPackets);
+        byte[] reassembledFile = Packet.reassemblePacket(received);
         String reassembledFileString = new String(reassembledFile);
         System.out.println("\nfile recieved from server:\n" + reassembledFileString);
+    }
+
+    private static void errorDetection(ArrayList<Packet> packetList) {
+        for (Packet packet : packetList) {
+            Short checkSum = Short.parseShort(packet.getHeaderValue(Packet.HEADER_ELEMENTS.CHECKSUM));
+            byte[] data = packet.getPacketData();
+            short calculatedCheckSum = Packet.checkSum(data);
+            if (!checkSum.equals(calculatedCheckSum)) {
+                System.out.println("Error detected in Packet Number: " + packet.getHeaderValue(Packet.HEADER_ELEMENTS.SEGMENT_NUMBER));
+            }
+        }
     }
 
     private static void gremlin(String probability, Packet packet) {
@@ -87,16 +98,4 @@ class UDPClient {
             }
         }
     }
-
-    private static void errorDetection(ArrayList<Packet> packetList) {
-        for (Packet packet : packetList) {
-            Short checkSum = Short.parseShort(packet.getHeaderValue(Packet.HEADER_ELEMENTS.CHECKSUM));
-            byte[] data = packet.getPacketData();
-            short calculatedCheckSum = Packet.checkSum(data);
-            if (!checkSum.equals(calculatedCheckSum)) {
-                System.out.println("Error detected in Packet Number: " + packet.getHeaderValue(Packet.HEADER_ELEMENTS.SEGMENT_NUMBER));
-            }
-        }
-    }
-
 }
