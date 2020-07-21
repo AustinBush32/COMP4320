@@ -16,12 +16,13 @@ class UDPClient {
         String http_request = "GET TestFile.html HTTP/1.0";
 
         // Send packet to server
+        System.out.println("-------------------------Sending Data to Server-------------------------");
         byte[] data_out = http_request.getBytes();
         DatagramPacket packet_out = new DatagramPacket(
             data_out, data_out.length, server_ip, server_port
         );    
         client_socket.send(packet_out);
-        System.out.println("-------------------------Sending Data to Server-------------------------");
+        System.out.println("Complete");
 
         // receive packet from server
         System.out.println("-----------------------Receiving Data from Server-----------------------");
@@ -36,11 +37,11 @@ class UDPClient {
             client_socket.receive(packet_in);
             Packet data_received = Packet.createPacket(packet_in);
             packet_num++;
-            System.out.println("Received packet_num: " + packet_num);
             if (data_received.GETPacketData()[0] == '\0') {
                 data_done_sending = true;
             } else {
                 received_packets.add(data_received);
+                System.out.println("Received packet_num: " + packet_num);
             }
         }
 
@@ -62,7 +63,7 @@ class UDPClient {
 
         byte[] reassembled_file = Packet.reassemblePacket(received_packets);
         String reassembled_file_string = new String(reassembled_file);
-        System.out.println("file recieved from server:\n" + reassembled_file_string);
+        System.out.println("\nfile recieved from server:\n" + reassembled_file_string);
     }
 
     private static void gremlin(String probability, Packet packet) {
