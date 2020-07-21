@@ -1,0 +1,176 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20200721172956
+Username: DESKTOP-BO3H55K\cbinm
+RunAs User: DESKTOP-BO3H55K\cbinm
+Configuration Name: 
+Machine: DESKTOP-BO3H55K (Microsoft Windows NT 10.0.18362.0)
+Host Application: PowerShell.exe -noexit -command Set-Location -literalPath 'C:\wkspc\COMP4320\projects\project_1'
+Process ID: 15440
+PSVersion: 5.1.18362.752
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.18362.752
+BuildVersion: 10.0.18362.752
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is C:\wkspc\COMP4320\projects\project_1\client_session.txt
+PS C:\wkspc\COMP4320\projects\project_1> java UDPClient 0.5
+-------------------------Sending Data to Server-------------------------
+Complete
+-----------------------Receiving Data from Server-----------------------
+Received packetNum: 1
+Received packetNum: 2
+Received packetNum: 3
+Received packetNum: 4
+Received packetNum: 5
+Received packetNum: 6
+Received packetNum: 7
+Received packetNum: 8
+Received packetNum: 9
+Received packetNum: 10
+Received packetNum: 11
+Received packetNum: 12
+Received packetNum: 13
+Received packetNum: 14
+Received packetNum: 15
+Received packetNum: 16
+Received packetNum: 17
+Received packetNum: 18
+Received packetNum: 19
+Received packetNum: 20
+Received packetNum: 21
+Received packetNum: 22
+Received packetNum: 23
+Received packetNum: 24
+Received packetNum: 25
+Received packetNum: 26
+Received packetNum: 27
+Received packetNum: 28
+Received packetNum: 29
+Received packetNum: 30
+Received packetNum: 31
+Received packetNum: 32
+Received packetNum: 33
+Received packetNum: 34
+Received packetNum: 35
+Received packetNum: 36
+Received packetNum: 37
+Received packetNum: 38
+Received packetNum: 39
+Received packetNum: 40
+Received packetNum: 41
+Received packetNum: 42
+Received packetNum: 43
+------------------------Running Gremlin Function------------------------
+Error detected in Packet Number: 6
+Error detected in Packet Number: 9
+Error detected in Packet Number: 12
+Error detected in Packet Number: 14
+Error detected in Packet Number: 15
+Error detected in Packet Number: 16
+Error detected in Packet Number: 17
+Error detected in Packet Number: 20
+Error detected in Packet Number: 22
+Error detected in Packet Number: 26
+Error detected in Packet Number: 27
+Error detected in Packet Number: 28
+Error detected in Packet Number: 29
+Error detected in Packet Number: 33
+Error detected in Packet Number: 35
+Error detected in Packet Number: 36
+Error detected in Packet Number: 37
+Error detected in Packet Number: 39
+Error detected in Packet Number: 40
+
+file recieved from server:
+HTTP/1.0 TestFile.html Follows
+Content-Type: text/plain
+Content-Length: 10589
+
+<!doctype html><html lang="en">    <head>        <meta charset="ASCII">        <title>Test File</title>    </head>    <body>        <h1
+>Test File</h1>        <img id="image" src="https://www.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?url=ht
+tp%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T
+212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cybertruck">        <h1>1</h1>
+    <img id="image" src="https://www.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.be
+am.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMPEFA
+M0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cybertruck">        <img id="image" src="https://www.
+usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b
+745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"
+   alt="Elon Musk presenting Telsa, Inc. new Cybertruck">        <img id="image" src="https://www.usnews.com/dims4/USNEWS/9fae757/21474
+83647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b74?d82eab4a477%2Ftag%3Areuters.com%2C
+2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, I
+nc. new Cybertruck">        <img id="image" src="https://www.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?u
+rl=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-1
+1-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cybertruck">        <img id="
+image" src="https://www.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com
+%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_
+3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cybertruck">        <img id="image" src="http?://www.usnews.com/di
+ms4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a47
+7%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon
+Musk presenting Telsa, Inc. new Cybertruck">        <img id="image" src="https://www.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbna
+il/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml
+_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMPE?AM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cyber
+truck">        <img id="image" src="https://www.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?url=http%3A%2F
+%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_
+1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cybertruck">        <img id="im?ge" src="h
+ttps://www.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c?2F92b3a
+6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKU
+P.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cybertruck">        <img id="image" src="https:/?www.usnews.com/dims4/USNEWS/9f
+ae757/21474836?7/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areu
+ters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"    ß   alt="Elon Musk presenti
+ng Telsa, Inc. new Cybertruck">        <img id="image? src="https://www.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/qu
+ality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a?77%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0Q
+T%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cybertruck">
+  <img id="image" src="https://www.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam
+.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0
+QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cybertruck">        <img id="image" src="https://www.us
+news.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?url=http%?A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b74
+5d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-1?-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"
+ alt="Elon Musk presenting Telsa, Inc. new Cybertruck">        <img id="image" src="https://www.usnews.com/dims4/USNEWS/9fae757/2147483
+647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C20
+19%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-P?CKUP.JPG"        alt="Elon Musk presenting Telsa, Inc
+. new Cybertru?k?>        <h1>2</h1>        <img id="image" src="https://www.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x4
+20/quality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPE
+FAM0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cybertruck">
+       <img id="image" src="https://www.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia
+.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMP
+EFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cybertruck">        <img id="image" src="https://w
+ww.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam.usnewsÑcom%2F3c%2F92b3a6ba8e0a8
+78b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"
+      alt="Elon Musk presenting Telsa, Inc. new Cybertruck">        <img id="image" src="https://www.usnews.com/dims4/USNEWS/9fae757/?1
+47483647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.co?
+%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23«212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa
+, Inc. new Cybertruck">        <img id="image" src="https://www.usnews.com/dims4/USNEW¬/9fae757/2147483647/thumbnail/640x420/quality/85
+/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F9?b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A1201
+9-11-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cybertruck">        <img i
+d="image" src="https://www.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam.usnews.
+com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_RTROP
+TP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cybertruck">        <img id="image" src="https://www.usnews.com
+/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4
+a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="El
+on Musk presenting Telsa, Inc. new Cybertruck">   ß    <h1>3</h1>        <img id="image" src="https://www.usnews.com/dims4/USNEWS/9fae7
+57/2147483647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuter
+s.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting
+Telsa, Inc. new Cybertruck">        <img id="image" src="https://www.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quali
+ty/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3
+A12019-11-23T212630Z_1_LYNX²PEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cybe?truck">        <
+img id="image" src="https://www.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam.us
+news.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEF?M0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_
+RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cybertruck">        <img id="image" src="https://www.usnew
+s.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/quality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d8
+2eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        al
+t="Elon Musk presenting Te?sa, Inc. new Cybertruck">        <img id="image" src="https://www.usnews.com/dims4/USNEWS/9fae757/2147?83647
+/thumbnail/640x420/q?ality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%
+3Anewsml_LYNXMPEFAM0QT%3A12019-11-23T2?26?0Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. n
+ew Cybertruck">        <h1>4</h1>        <img id="image" src="h?tps://www.usnews.com/dims4/USNEWS/9fae757/2147483647/thumbnail/640x420/
+quality/85/?url=http%3A%2F%2Fmedia.beam.usnews.com%2F3c%2F92b3a6ba8e0a878b745d82eab4a477%2Ftag%3Areuters.com%2C2019%3Anewsml_LYNXMPEFAM
+0QT%3A12019-11-23T212630Z_1_LYNXMPEFAM0QT_RTROPTP_3_TESLA-PICKUP.JPG"        alt="Elon Musk presenting Telsa, Inc. new Cybertruck">
+    <script src="js/scripts.js"></script>    </body></html>
+PS C:\wkspc\COMP4320\projects\project_1> Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20200721173019
+**********************

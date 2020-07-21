@@ -10,7 +10,7 @@ class UDPClient {
 
         // Variable initializations
         DatagramSocket clientSocket = new DatagramSocket();
-        InetAddress serverIP = InetAddress.getByName("localhost");
+        InetAddress serverIP = InetAddress.getByName("192.168.0.65");
         int serverPort = 9090;
         String httpRequest = "GET TestFile.html HTTP/1.0";
 

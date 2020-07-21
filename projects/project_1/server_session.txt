@@ -1,0 +1,12 @@
+Script started on Tue Jul 21 17:28:26 2020
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+[?1034hbash-3.2$ java UDPServer.[K
+List of segmented packets is 43 packets long
+Sending null character
+Sent^Cbash-3.2$ exit
+exit
+
+Script done on Tue Jul 21 17:30:37 2020
