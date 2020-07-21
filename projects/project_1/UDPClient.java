@@ -1,7 +1,6 @@
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 import java.awt.*;
 
 
@@ -37,7 +36,7 @@ class UDPClient {
             clientSocket.receive(packetIn);
             Packet dataReceived = Packet.createPacket(packetIn);
             packetNum++;
-            if (dataReceived.GETPacketData()[0] == '\0') {
+            if (dataReceived.getPacketData()[0] == '\0') {
                 dataDoneSending = true;
             } else {
                 receivedPackets.add(dataReceived);
@@ -82,7 +81,7 @@ class UDPClient {
 
         if (damageProb <= Double.parseDouble(probability)) {
             for (int i = 0; i < bytesToChange; i++) {
-                byte[] data = packet.GETPacketData();
+                byte[] data = packet.getPacketData();
                 int byteNum = rand.nextInt(packet.getPacketDataSize());
                 data[byteNum] = (byte) ~data[byteNum];
             }
@@ -92,7 +91,7 @@ class UDPClient {
     private static void errorDetection(ArrayList<Packet> packetList) {
         for (Packet packet : packetList) {
             Short checkSum = Short.parseShort(packet.getHeaderValue(Packet.HEADER_ELEMENTS.CHECKSUM));
-            byte[] data = packet.GETPacketData();
+            byte[] data = packet.getPacketData();
             short calculatedCheckSum = Packet.checkSum(data);
             if (!checkSum.equals(calculatedCheckSum)) {
                 System.out.println("Error detected in Packet Number: " + packet.getHeaderValue(Packet.HEADER_ELEMENTS.SEGMENT_NUMBER));

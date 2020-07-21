@@ -1,9 +1,6 @@
-
 import java.net.*;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /*
  * Includes methods to create packets, getting packet data, getting and setting the packet header,
@@ -28,30 +25,85 @@ public class Packet {
 
     //Constructor
     public Packet() {
-        //initalize packetData and packetHeader
-        packetData = new byte[PACKET_SIZE];
         packetHeader = new HashMap<>();
+        packetData = new byte[PACKET_SIZE];
+    }
+
+    // method to create a new packet
+    static Packet createPacket(DatagramPacket packet) {
+
+        Packet newPacket = new Packet(); // initalize a packet
+        ByteBuffer bytebuffer = ByteBuffer.wrap(packet.getData()); // wrap into buffer
+        byte[] data = packet.getData();
+        byte[] remainder;
+
+        // Set header segments
+        newPacket.setHeaderValue(HEADER_ELEMENTS.SEGMENT_NUMBER, Short.toString(bytebuffer.getShort()));
+        newPacket.setHeaderValue(HEADER_ELEMENTS.CHECKSUM, Short.toString(bytebuffer.getShort()));
+
+        remainder = new byte[data.length - bytebuffer.position()];
+        System.arraycopy(data, bytebuffer.position(), remainder, 0, remainder.length); 
+        newPacket.setPacketData(remainder);
+        return newPacket;
+    }
+
+    // method to segment the file into 256 bit chunks
+    static ArrayList<Packet> segmentation(byte[] file) {
+
+        ArrayList<Packet> packet = new ArrayList<>();
+        int len = file.length; //length of the file
+        int byteCounter = 0;
+        int segmentCounter = 0;
+
+        // check if the file is empty
+        if (len == 0) {
+            throw new IllegalArgumentException("Empty File");
+        }
+
+        // segment the file into packets of size 252 bytes
+        while (byteCounter < len) {
+            Packet upcomingPacket = new Packet();
+            byte[] data = new byte[PACKET_DATA_SIZE];
+            int dataSize = PACKET_DATA_SIZE;
+            if (len - byteCounter < PACKET_DATA_SIZE) {
+                dataSize = len - byteCounter;
+            }
+            int j = byteCounter;
+            for (int i = 0; i < dataSize; i++) {
+                data[i] = file[j];
+                j++;
+            }
+            upcomingPacket.setPacketData(data);
+            upcomingPacket.setHeaderValue(HEADER_ELEMENTS.SEGMENT_NUMBER, Integer.toString(segmentCounter));
+            String checkSumValue = String.valueOf(Packet.checkSum(data));
+            upcomingPacket.setHeaderValue(HEADER_ELEMENTS.CHECKSUM, checkSumValue);
+            packet.add(upcomingPacket);
+            segmentCounter++;
+            byteCounter += dataSize;
+        }
+        return packet;
     }
 
     // method to reassemble packets in UDPClient.
     static byte[] reassemblePacket(ArrayList<Packet> packetList) {
     
         int size = 0;
+        int counter = 0;
+        byte[] assembledPacket;
+
         // find how large the total size is
         for(Packet packet : packetList) {
             size += packet.getPacketDataSize();
         }
+        assembledPacket = new byte[size]; //byte array for assembled packet
 
-        byte[] assembledPacket = new byte[size]; //byte array for assembled packet
-
-        int counter = 0;
         // assemble the packets
         for (int i = 0; i < packetList.size(); i++) {
             for (Packet packet : packetList) {
                 String segment = packet.getHeaderValue(HEADER_ELEMENTS.SEGMENT_NUMBER);
                 if (Integer.parseInt(segment) == i) {
                     for(int j = 0; j < packet.getPacketDataSize(); j++) {
-                        assembledPacket[counter + j] = packet.GETPacketData(j);
+                        assembledPacket[counter + j] = packet.getPacketData(j);
                     }
                     counter += packet.getPacketDataSize();
                     break;
@@ -61,74 +113,23 @@ public class Packet {
         return assembledPacket;
     }
 
-    // method to segment the file into 256 bit chunks
-    static ArrayList<Packet> segmentation(byte[] file) {
-        ArrayList<Packet> packet = new ArrayList<>();
-        int len = file.length; //length of the file
-
-        // check if the file is empty
-        if (len == 0) {
-            throw new IllegalArgumentException("File Empty");
-        }
-        int byteCounter = 0;
-        int segmentNumber = 0;
-
-        // segment the file into packets of size 252 bytes
-        while (byteCounter < len) {
-            Packet nextPacket = new Packet();
-            byte[] data = new byte[PACKET_DATA_SIZE];
-            int readInDataSize = PACKET_DATA_SIZE;
-            if (len - byteCounter < PACKET_DATA_SIZE) {
-                readInDataSize = len - byteCounter;
-            }
-            int j = byteCounter;
-            for (int i = 0; i < readInDataSize; i++) {
-                data[i] = file[j];
-                j++;
-            }
-            nextPacket.setPacketData(data);
-            nextPacket.setHeaderValue(HEADER_ELEMENTS.SEGMENT_NUMBER, segmentNumber + "");
-            String CheckSumPacket = String.valueOf(Packet.checkSum(data));
-            nextPacket.setHeaderValue(HEADER_ELEMENTS.CHECKSUM, CheckSumPacket);
-            packet.add(nextPacket);
-            segmentNumber++;
-            byteCounter = byteCounter + readInDataSize;
-        }
-        return packet;
-    }
-
-    // method to create a new packet
-    static Packet createPacket(DatagramPacket packet) {
-        Packet newPacket = new Packet(); // initalize a packet
-        ByteBuffer bytebuffer = ByteBuffer.wrap(packet.getData()); // wrap into buffer
-
-        // Set header segments
-        String seg = bytebuffer.getShort() + "";
-        newPacket.setHeaderValue(HEADER_ELEMENTS.SEGMENT_NUMBER, seg);
-        newPacket.setHeaderValue(HEADER_ELEMENTS.CHECKSUM, bytebuffer.getShort() + "");
-
-        byte[] data = packet.getData();
-        byte[] remaining = new byte[data.length - bytebuffer.position()];
-        System.arraycopy(data, bytebuffer.position(), remaining, 0, remaining.length); 
-        newPacket.setPacketData(remaining);
-        return newPacket;
-    }
-
     // method to return the 16bit checksum value for the packet
-    static short checkSum(byte[] packetBytes) {
+    static short checkSum(byte[] packet) {
+
         long sum = 0;
-        int packetByteLength = packetBytes.length;
+        int byteLength = packet.length;
         int count = 0;
-        while (packetByteLength > 1) { 
-            sum += ((packetBytes[count]) << 8 & 0xFF00) | ((packetBytes[count + 1]) & 0x00FF);
+
+        while (byteLength > 1) { 
+            sum += ((packet[count]) << 8 & 0xFF00) | ((packet[count + 1]) & 0x00FF);
             if ((sum & 0xFFFF0000) > 0) {
                 sum = ((sum & 0xFFFF) + 1);
             }
             count += 2;
-            packetByteLength -= 2;
+            byteLength -= 2;
         }
-        if (packetByteLength > 0) {
-            sum += (packetBytes[count] << 8 & 0xFF00);
+        if (byteLength > 0) {
+            sum += (packet[count] << 8 & 0xFF00);
             if ((sum & 0xFFFF0000) > 0) { 
                 sum = ((sum & 0xFFFF) + 1);
             }
@@ -145,8 +146,37 @@ public class Packet {
             case CHECKSUM:
                 return packetHeader.get(HEADER_CHECK_SUM);
             default:
-                throw new IllegalArgumentException("error in getHeaderValue");
+                throw new IllegalArgumentException("Error in getHeaderValue");
         }
+    }
+
+    // gets the packet data at an index
+    private byte getPacketData(int index) {
+        if (index >= 0 && index < packetData.length) {
+            return packetData[index];
+        }
+        throw new IndexOutOfBoundsException("getPacketData out of bound exception at index " + index);
+    }
+
+    // gets packet data
+    byte[] getPacketData() {
+        return packetData;
+    }
+
+    // get packet data size
+    int getPacketDataSize() {
+        return packetData.length;
+    }
+
+     // returns packet as a datagram packet
+     DatagramPacket getDatagramPacket(InetAddress ip, int port) {
+        byte[] setData = ByteBuffer.allocate(256)
+                .putShort(Short.parseShort(packetHeader.get(HEADER_SEGMENT_NUM)))
+                .putShort(Short.parseShort(packetHeader.get(HEADER_CHECK_SUM)))
+                .put(packetData)
+                .array();
+
+        return new DatagramPacket(setData, setData.length, ip, port);
     }
 
     // method to set header key/value pairs
@@ -159,51 +189,20 @@ public class Packet {
                 packetHeader.put(HEADER_CHECK_SUM, HeaderValue);
                 break;
             default:
-                throw new IllegalArgumentException("Something is broken... bad broken");
+                throw new IllegalArgumentException("Error in setHeaderValue");
         }
     }
 
-    // gets the packet data at an index
-    private byte GETPacketData(int index) {
-        if (index >= 0 && index < packetData.length) {
-            return packetData[index];
-        }
-        throw new IndexOutOfBoundsException("GET PACKET DATA INDEX OUT OF BOUNDS EXCEPTION: index = " + index);
-    }
-
-    // gets packet data
-    byte[] GETPacketData() {
-        return packetData;
-    }
-
-    // get packet data size
-    int getPacketDataSize() {
-        return packetData.length;
-    }
-
-    //Takes an array of bytes to be set as the data segment.
-    //If the Packet contains data already, the data is overwritten.
-    //Throws IllegalArgumentException if the size of toSet does not
-    //conform with the size of the data segment in the packet.
+    // Sets the packet to an array of bytes
     private void setPacketData(byte[] toSet) throws IllegalArgumentException {
-        int argumentSize = toSet.length;
-        if (argumentSize > 0) {
-            packetData = new byte[argumentSize];
+        int toSetLen = toSet.length;
+
+        if (toSetLen > 0) {
+            packetData = new byte[toSetLen];
             System.arraycopy(toSet, 0, packetData, 0, packetData.length);
         } else {
-            throw new IllegalArgumentException("ILLEGAL ARGUEMENT EXCEPTION-SET PACKET DATA: toSet.length = " + toSet.length);
+            throw new IllegalArgumentException("Illegal argument exception in setPacketData: toSet.length = " + toSet.length);
         }
             
-    }
-
-     //returns packet as a datagram packet
-    DatagramPacket getDatagramPacket(InetAddress i, int port) {
-        byte[] setData = ByteBuffer.allocate(256)
-                .putShort(Short.parseShort(packetHeader.get(HEADER_SEGMENT_NUM)))
-                .putShort(Short.parseShort(packetHeader.get(HEADER_CHECK_SUM)))
-                .put(packetData)
-                .array();
-
-        return new DatagramPacket(setData, setData.length, i, port);
-    }
+    }   
 }

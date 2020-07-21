@@ -66,7 +66,7 @@ class UDPServer {
                 DatagramPacket sendPacket = packet.getDatagramPacket(clientIP, clientPort);
                 serverSocket.send(sendPacket);
 
-                // packetOut.setData(packet.GETPacketData()); 
+                // packetOut.setData(packet.getPacketData()); 
                 // serverSocket.send(packetOut);
             }
 
@@ -80,7 +80,7 @@ class UDPServer {
             System.out.println("Sending null character");
             ArrayList<Packet> nullPacket = Packet.segmentation(nullByte.getBytes());
             // packetOut.setData(dataTerminate);
-            // packetOut.setData(nullPacket.get(0).GETPacketData());
+            // packetOut.setData(nullPacket.get(0).getPacketData());
             DatagramPacket nullDatagram = nullPacket.get(0).getDatagramPacket(clientIP, clientPort);
             serverSocket.send(nullDatagram);
             System.out.print("Sent");
