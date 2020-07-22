@@ -29,7 +29,6 @@ class UDPServer {
                 clientGetRequest.indexOf(" ") + 1, clientGetRequest.lastIndexOf(" ")
             );
             BufferedReader fileIn = new BufferedReader(new FileReader(fileName));
-            // Scanner fileIn = new Scanner(new File(fileName));
             StringBuilder fileDataContents = new StringBuilder();
 
             String line = fileIn.readLine();
@@ -46,17 +45,17 @@ class UDPServer {
                     + "Content-Length: " + fileDataContents.length() + "\r\n"
                     + "\r\n" + fileDataContents;
 
-            ArrayList<Packet> packetList = Packet.segment(httpHeader.getBytes()); //segments file into packets
+            ArrayList<UDPPacket> packetList = UDPPacket.segment(httpHeader.getBytes()); //segments file into packets
             System.out.println("List of segmented packets is " + packetList.size() + " packets long");
 
-            for(Packet packet : packetList) {
+            for(UDPPacket packet : packetList) {
                 DatagramPacket sendPacket = packet.getDatagramPacket(clientIP, clientPort);
                 serverSocket.send(sendPacket);
             }
 
             // Notify the client that all data has been sent via a null character
             System.out.println("Sending null character");
-            ArrayList<Packet> nullPacket = Packet.segment(nullByte.getBytes());
+            ArrayList<UDPPacket> nullPacket = UDPPacket.segment(nullByte.getBytes());
             DatagramPacket nullDatagram = nullPacket.get(0).getDatagramPacket(clientIP, clientPort);
             serverSocket.send(nullDatagram);
             System.out.print("Sent");

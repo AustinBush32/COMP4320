@@ -28,13 +28,13 @@ class UDPClient {
         byte[] dataIn = new byte[256];
         DatagramPacket packetIn = new DatagramPacket(dataIn, dataIn.length);
         
-        ArrayList<Packet> received = new ArrayList<>();
+        ArrayList<UDPPacket> received = new ArrayList<>();
         boolean finished = false;
         int packetNum = 0;
 
         while (!finished) {
             clientSocket.receive(packetIn);
-            Packet dataReceived = Packet.makePacket(packetIn);
+            UDPPacket dataReceived = UDPPacket.makePacket(packetIn);
             packetNum++;
             if (dataReceived.getPacketData()[0] == '\0') {
                 finished = true;
@@ -54,31 +54,31 @@ class UDPClient {
             System.out.println("There were no command line argumants for gremlin function");
         }
 
-        for (Packet packet : received) {
+        for (UDPPacket packet : received) {
             gremlin(gremlinProb, packet);
         }
 
         errorDetection(received);
 
-        byte[] reassembledFile = Packet.reassemble(received);
+        byte[] reassembledFile = UDPPacket.reassemble(received);
         String reassembledFileString = new String(reassembledFile);
         System.out.println("\nfile recieved from server:\n" + reassembledFileString);
     }
 
-    private static void errorDetection(ArrayList<Packet> packetList) {
-        for (Packet packet : packetList) {
-            String checksumHeaderValue = packet.getHeaderValue(Packet.HEADER_VALUES.CHECKSUM);
+    private static void errorDetection(ArrayList<UDPPacket> packetList) {
+        for (UDPPacket packet : packetList) {
+            String checksumHeaderValue = packet.getHeaderValue(UDPPacket.HEADER_VALUES.CHECKSUM);
             Short checkSum = Short.parseShort(checksumHeaderValue);
             byte[] data = packet.getPacketData();
-            short calculatedCheckSum = Packet.calculateChecksum(data);
+            short calculatedCheckSum = UDPPacket.calculateChecksum(data);
             if (!checkSum.equals(calculatedCheckSum)) {
-                String segmentHeaderValue = packet.getHeaderValue(Packet.HEADER_VALUES.SEGMENT_NUM);
-                System.out.println("Error detected in Packet Number: " + segmentHeaderValue);
+                String segmentHeaderValue = packet.getHeaderValue(UDPPacket.HEADER_VALUES.SEGMENT_NUM);
+                System.out.println("Error detected in UDPPacket Number: " + segmentHeaderValue);
             }
         }
     }
 
-    private static void gremlin(String probability, Packet packet) {
+    private static void gremlin(String probability, UDPPacket packet) {
         Random rand = new Random();
         double damageProb = rand.nextDouble();
         double flipProb = rand.nextDouble();
