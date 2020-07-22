@@ -18,8 +18,8 @@ public class Packet {
     private byte[] packetData; //byte array for packet data
 
     // enum for key/value pairs
-    public enum HEADER_ELEMENTS {
-        SEGMENT_NUMBER,
+    public enum HEADER_VALUES {
+        SEGMENT_NUM,
         CHECKSUM
     }
 
@@ -38,8 +38,8 @@ public class Packet {
         byte[] remainder;
 
         // Set header segments
-        newPacket.setHeaderValue(HEADER_ELEMENTS.SEGMENT_NUMBER, Short.toString(bytebuffer.getShort()));
-        newPacket.setHeaderValue(HEADER_ELEMENTS.CHECKSUM, Short.toString(bytebuffer.getShort()));
+        newPacket.setHeaderValue(HEADER_VALUES.SEGMENT_NUM, Short.toString(bytebuffer.getShort()));
+        newPacket.setHeaderValue(HEADER_VALUES.CHECKSUM, Short.toString(bytebuffer.getShort()));
 
         remainder = new byte[data.length - bytebuffer.position()];
         System.arraycopy(data, bytebuffer.position(), remainder, 0, remainder.length); 
@@ -74,9 +74,9 @@ public class Packet {
                 j++;
             }
             upcomingPacket.setPacketData(data);
-            upcomingPacket.setHeaderValue(HEADER_ELEMENTS.SEGMENT_NUMBER, Integer.toString(segmentCounter));
+            upcomingPacket.setHeaderValue(HEADER_VALUES.SEGMENT_NUM, Integer.toString(segmentCounter));
             String checkSumValue = String.valueOf(Packet.calculateChecksum(data));
-            upcomingPacket.setHeaderValue(HEADER_ELEMENTS.CHECKSUM, checkSumValue);
+            upcomingPacket.setHeaderValue(HEADER_VALUES.CHECKSUM, checkSumValue);
             packet.add(upcomingPacket);
             segmentCounter++;
             byteCounter += dataSize;
@@ -100,7 +100,7 @@ public class Packet {
         // assemble the packets
         for (int i = 0; i < packetList.size(); i++) {
             for (Packet packet : packetList) {
-                String segment = packet.getHeaderValue(HEADER_ELEMENTS.SEGMENT_NUMBER);
+                String segment = packet.getHeaderValue(HEADER_VALUES.SEGMENT_NUM);
                 if (Integer.parseInt(segment) == i) {
                     for(int j = 0; j < packet.getPacketSize(); j++) {
                         assembledPacket[counter + j] = packet.getPacketData(j);
@@ -139,9 +139,9 @@ public class Packet {
 
 
     // method to get header element values
-    String getHeaderValue(HEADER_ELEMENTS headerElements) {
-        switch (headerElements) {
-            case SEGMENT_NUMBER:
+    String getHeaderValue(HEADER_VALUES headerValue) {
+        switch (headerValue) {
+            case SEGMENT_NUM:
                 return packetHeader.get(HEADER_SEGMENT_NUM);
             case CHECKSUM:
                 return packetHeader.get(HEADER_CHECK_SUM);
@@ -180,13 +180,13 @@ public class Packet {
     }
 
     // method to set header key/value pairs
-    private void setHeaderValue(HEADER_ELEMENTS headerElements, String headerValue) {
-        switch (headerElements) {
-            case SEGMENT_NUMBER:
-                packetHeader.put(HEADER_SEGMENT_NUM, headerValue);
+    private void setHeaderValue(HEADER_VALUES headerValue, String value) {
+        switch (headerValue) {
+            case SEGMENT_NUM:
+                packetHeader.put(HEADER_SEGMENT_NUM, value);
                 break;
             case CHECKSUM:
-                packetHeader.put(HEADER_CHECK_SUM, headerValue);
+                packetHeader.put(HEADER_CHECK_SUM, value);
                 break;
             default:
                 throw new IllegalArgumentException("Error in setHeaderValue");

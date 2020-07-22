@@ -48,10 +48,10 @@ class UDPClient {
 
         System.out.println("------------------------Running Gremlin Function------------------------");
         String gremlinProb = "0.0";
-        if (args.length == 0) {
-            System.out.println("There were no command line argumants for gremlin function");
-        } else {
+        if (args.length != 0) {
             gremlinProb = args[0];
+        } else {
+            System.out.println("There were no command line argumants for gremlin function");
         }
 
         for (Packet packet : received) {
@@ -67,11 +67,13 @@ class UDPClient {
 
     private static void errorDetection(ArrayList<Packet> packetList) {
         for (Packet packet : packetList) {
-            Short checkSum = Short.parseShort(packet.getHeaderValue(Packet.HEADER_ELEMENTS.CHECKSUM));
+            String checksumHeaderValue = packet.getHeaderValue(Packet.HEADER_VALUES.CHECKSUM);
+            Short checkSum = Short.parseShort(checksumHeaderValue);
             byte[] data = packet.getPacketData();
             short calculatedCheckSum = Packet.calculateChecksum(data);
             if (!checkSum.equals(calculatedCheckSum)) {
-                System.out.println("Error detected in Packet Number: " + packet.getHeaderValue(Packet.HEADER_ELEMENTS.SEGMENT_NUMBER));
+                String segmentHeaderValue = packet.getHeaderValue(Packet.HEADER_VALUES.SEGMENT_NUM);
+                System.out.println("Error detected in Packet Number: " + segmentHeaderValue);
             }
         }
     }
@@ -90,7 +92,7 @@ class UDPClient {
             bytesToChange = 3;
         }
 
-        if (damageProb <= Double.parseDouble(probability)) {
+        if (Double.parseDouble(probability) >= damageProb) {
             for (int i = 0; i < bytesToChange; i++) {
                 byte[] data = packet.getPacketData();
                 int byteNum = rand.nextInt(packet.getPacketSize());
