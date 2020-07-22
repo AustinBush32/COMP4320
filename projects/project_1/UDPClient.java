@@ -34,7 +34,7 @@ class UDPClient {
 
         while (!finished) {
             clientSocket.receive(packetIn);
-            Packet dataReceived = Packet.createPacket(packetIn);
+            Packet dataReceived = Packet.makePacket(packetIn);
             packetNum++;
             if (dataReceived.getPacketData()[0] == '\0') {
                 finished = true;
@@ -60,7 +60,7 @@ class UDPClient {
 
         errorDetection(received);
 
-        byte[] reassembledFile = Packet.reassemblePacket(received);
+        byte[] reassembledFile = Packet.reassemble(received);
         String reassembledFileString = new String(reassembledFile);
         System.out.println("\nfile recieved from server:\n" + reassembledFileString);
     }
@@ -69,7 +69,7 @@ class UDPClient {
         for (Packet packet : packetList) {
             Short checkSum = Short.parseShort(packet.getHeaderValue(Packet.HEADER_ELEMENTS.CHECKSUM));
             byte[] data = packet.getPacketData();
-            short calculatedCheckSum = Packet.checkSum(data);
+            short calculatedCheckSum = Packet.calculateChecksum(data);
             if (!checkSum.equals(calculatedCheckSum)) {
                 System.out.println("Error detected in Packet Number: " + packet.getHeaderValue(Packet.HEADER_ELEMENTS.SEGMENT_NUMBER));
             }
@@ -93,7 +93,7 @@ class UDPClient {
         if (damageProb <= Double.parseDouble(probability)) {
             for (int i = 0; i < bytesToChange; i++) {
                 byte[] data = packet.getPacketData();
-                int byteNum = rand.nextInt(packet.getPacketDataSize());
+                int byteNum = rand.nextInt(packet.getPacketSize());
                 data[byteNum] = (byte) ~data[byteNum];
             }
         }

@@ -39,15 +39,14 @@ class UDPServer {
                 fileDataContents.append(line);
                 line = fileIn.readLine();
             }
-
             fileIn.close();
 
-            String httpHeaderForm = "HTTP/1.0 TestFile.html Follows\r\n"
+            String httpHeader = "HTTP/1.0 TestFile.html Follows\r\n"
                     + "Content-Type: text/plain\r\n"
                     + "Content-Length: " + fileDataContents.length() + "\r\n"
                     + "\r\n" + fileDataContents;
 
-            ArrayList<Packet> packetList = Packet.segmentation(httpHeaderForm.getBytes()); //segments file into packets
+            ArrayList<Packet> packetList = Packet.segment(httpHeader.getBytes()); //segments file into packets
             System.out.println("List of segmented packets is " + packetList.size() + " packets long");
 
             for(Packet packet : packetList) {
@@ -57,7 +56,7 @@ class UDPServer {
 
             // Notify the client that all data has been sent via a null character
             System.out.println("Sending null character");
-            ArrayList<Packet> nullPacket = Packet.segmentation(nullByte.getBytes());
+            ArrayList<Packet> nullPacket = Packet.segment(nullByte.getBytes());
             DatagramPacket nullDatagram = nullPacket.get(0).getDatagramPacket(clientIP, clientPort);
             serverSocket.send(nullDatagram);
             System.out.print("Sent");

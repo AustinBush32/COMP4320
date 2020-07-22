@@ -1,5 +1,5 @@
 import java.net.*;
-import java.nio.ByteBuffer;
+import java.nio.*;
 import java.util.*;
 
 /*
@@ -9,13 +9,13 @@ import java.util.*;
 */
 
 public class Packet {
-    private static String HEADER_SEGMENT_NUM = "SegmentNumber"; //key for segment number
     private static String HEADER_CHECK_SUM = "CheckSum"; //key for check sum
-    private static int PACKET_SIZE = 256; //packet size allowed by the network as stated in pdf
+    private static String HEADER_SEGMENT_NUM = "SegmentNumber"; //key for segment number
     private static final int HEADER_LINES = 4; //lines before data as stated in pdf
+    private static int PACKET_SIZE = 256; //packet size allowed by the network as stated in pdf
     private static final int PACKET_DATA_SIZE = PACKET_SIZE - HEADER_LINES; //actual size of data
-    private byte[] packetData; //byte array for packet data
     private Map<String, String> packetHeader; //map for packet header info
+    private byte[] packetData; //byte array for packet data
 
     // enum for key/value pairs
     public enum HEADER_ELEMENTS {
@@ -30,7 +30,7 @@ public class Packet {
     }
 
     // method to create a new packet
-    static Packet createPacket(DatagramPacket packet) {
+    static Packet makePacket(DatagramPacket packet) {
 
         Packet newPacket = new Packet(); // initalize a packet
         ByteBuffer bytebuffer = ByteBuffer.wrap(packet.getData()); // wrap into buffer
@@ -48,13 +48,13 @@ public class Packet {
     }
 
     // method to segment the file into 256 bit chunks
-    static ArrayList<Packet> segmentation(byte[] file) {
+    static ArrayList<Packet> segment(byte[] file) {
 
         ArrayList<Packet> packet = new ArrayList<>();
         int len = file.length; //length of the file
-        int byteCounter = 0;
         int segmentCounter = 0;
-
+        int byteCounter = 0;
+        
         // check if the file is empty
         if (len == 0) {
             throw new IllegalArgumentException("Empty File");
@@ -75,7 +75,7 @@ public class Packet {
             }
             upcomingPacket.setPacketData(data);
             upcomingPacket.setHeaderValue(HEADER_ELEMENTS.SEGMENT_NUMBER, Integer.toString(segmentCounter));
-            String checkSumValue = String.valueOf(Packet.checkSum(data));
+            String checkSumValue = String.valueOf(Packet.calculateChecksum(data));
             upcomingPacket.setHeaderValue(HEADER_ELEMENTS.CHECKSUM, checkSumValue);
             packet.add(upcomingPacket);
             segmentCounter++;
@@ -85,15 +85,15 @@ public class Packet {
     }
 
     // method to reassemble packets in UDPClient.
-    static byte[] reassemblePacket(ArrayList<Packet> packetList) {
+    static byte[] reassemble(ArrayList<Packet> packetList) {
     
-        int size = 0;
         int counter = 0;
+        int size = 0;
         byte[] assembledPacket;
 
         // find how large the total size is
         for(Packet packet : packetList) {
-            size += packet.getPacketDataSize();
+            size += packet.getPacketSize();
         }
         assembledPacket = new byte[size]; //byte array for assembled packet
 
@@ -102,10 +102,10 @@ public class Packet {
             for (Packet packet : packetList) {
                 String segment = packet.getHeaderValue(HEADER_ELEMENTS.SEGMENT_NUMBER);
                 if (Integer.parseInt(segment) == i) {
-                    for(int j = 0; j < packet.getPacketDataSize(); j++) {
+                    for(int j = 0; j < packet.getPacketSize(); j++) {
                         assembledPacket[counter + j] = packet.getPacketData(j);
                     }
-                    counter += packet.getPacketDataSize();
+                    counter += packet.getPacketSize();
                     break;
                 }
             }
@@ -114,7 +114,7 @@ public class Packet {
     }
 
     // method to return the 16bit checksum value for the packet
-    static short checkSum(byte[] packet) {
+    static short calculateChecksum(byte[] packet) {
 
         long sum = 0;
         int byteLength = packet.length;
@@ -139,8 +139,8 @@ public class Packet {
 
 
     // method to get header element values
-    String getHeaderValue(HEADER_ELEMENTS HeaderElements) {
-        switch (HeaderElements) {
+    String getHeaderValue(HEADER_ELEMENTS headerElements) {
+        switch (headerElements) {
             case SEGMENT_NUMBER:
                 return packetHeader.get(HEADER_SEGMENT_NUM);
             case CHECKSUM:
@@ -164,7 +164,7 @@ public class Packet {
     }
 
     // get packet data size
-    int getPacketDataSize() {
+    int getPacketSize() {
         return packetData.length;
     }
 
@@ -180,13 +180,13 @@ public class Packet {
     }
 
     // method to set header key/value pairs
-    private void setHeaderValue(HEADER_ELEMENTS HeaderElements, String HeaderValue) {
-        switch (HeaderElements) {
+    private void setHeaderValue(HEADER_ELEMENTS headerElements, String headerValue) {
+        switch (headerElements) {
             case SEGMENT_NUMBER:
-                packetHeader.put(HEADER_SEGMENT_NUM, HeaderValue);
+                packetHeader.put(HEADER_SEGMENT_NUM, headerValue);
                 break;
             case CHECKSUM:
-                packetHeader.put(HEADER_CHECK_SUM, HeaderValue);
+                packetHeader.put(HEADER_CHECK_SUM, headerValue);
                 break;
             default:
                 throw new IllegalArgumentException("Error in setHeaderValue");
