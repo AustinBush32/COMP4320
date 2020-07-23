@@ -1,3 +1,6 @@
+// Authors: Austin Bush, Cole Beck
+// Class: COMP 4320
+
 import java.net.*;
 import java.nio.*;
 import java.util.*;
